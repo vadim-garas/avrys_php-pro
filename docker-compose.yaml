@@ -13,4 +13,4 @@ services:
       PHP_IDE_CONFIG: "serverName=docker"
     # прописуємо синхронізацію директорій
     volumes:
-      - ./:/srv/src/avrys_php-pro
+      - ./:/srv/src/php-pro

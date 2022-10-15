@@ -1,6 +1,6 @@
 <?php
 
-namespace AvrysPHP\magic_fun;
+namespace AvrysPhp;
 
 use http\Exception;
 
@@ -28,9 +28,9 @@ class MyData
     public function addToFile($todoName, $arrData): void
     {
         if ($todoName){
-            $fileData = file_put_contents($todoName, json_encode($this->__serialize(), JSON_FORCE_OBJECT));
+            $this->fileData = file_put_contents($todoName, json_encode($this->__serialize(), JSON_FORCE_OBJECT));
+            $this->__unserialize($arrData);
             unset($this->fileData);
-            $this->arrData = $this->__unserialize($fileData);
         } else {
             throw new \http\Exception\InvalidArgumentException('is not exist');
         }
@@ -47,6 +47,7 @@ class MyData
         // TODO: Implement __unserialize() method.
         foreach ( $data as $key => $value ) {
             $this->$key = $value;
+            echo 'Data field key: '.$key.', value: '.$value;
         }
     }
 
