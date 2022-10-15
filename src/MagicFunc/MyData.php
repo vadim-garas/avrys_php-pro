@@ -6,8 +6,8 @@ use http\Exception;
 
 class MyData
 {
-    protected $arrData;
-    private $fileData;
+    protected array $arrData;
+    private mixed $fileData;
 
     public function __construct($arrData)
     {
@@ -17,8 +17,8 @@ class MyData
     public function getFromFile($todoName): void
     {
         if (file_exists($todoName)){
-            $file = file_get_contents($todoName);  // Открыть файл data.json
-            $this->fileData = json_decode($file,TRUE);        // Декодировать в массив
+            $file = file_get_contents($todoName);
+            $this->fileData = json_decode($file,TRUE);
             unset($file);
         } else {
             throw new \http\Exception\InvalidArgumentException('operator not exist');
@@ -51,18 +51,21 @@ class MyData
         }
     }
 
+    public function __clone(): void
+    {
+        $this->arrData = array('green', 'blue');
+    }
+
     /**
      * @return mixed
      */
     public function __get(string $name)
     {
-        // TODO: Implement __get() method.
         return $this->$name;
     }
 
     public function __set(string $name, $value): void
     {
-        // TODO: Implement __set() method.
         $this->$name = $value;
     }
 }

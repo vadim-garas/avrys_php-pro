@@ -4,12 +4,16 @@ require_once __DIR__.'/autoload.php';
 
 static $JASON_FILE_NAME = 'src/MagicFunc/todo.json';
 
-$arrData = array('first', 'second', 'orange');
+$arrData = array('first', 'second');
 
 try {
     $myData = new \AvrysPhp\MyData($arrData);
     $myData->getFromFile($JASON_FILE_NAME);
     $myData->addToFile($JASON_FILE_NAME, $arrData);
+
+    $myData_1 = clone $myData;
+    $myData_1->getFromFile($JASON_FILE_NAME);
+    $myData_1->addToFile($JASON_FILE_NAME, $arrData);
 
 } catch (Exception $e) {
 
