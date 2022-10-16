@@ -25,7 +25,7 @@ try {
         $dbOperator->saveData($value, $urlEncode);
 
         // Test decode with any key from url_db.json
-        echo 'URL PATH DECODE: ' . $urlMaster->decode('refactoring.guru/nhd') . PHP_EOL;
+        // echo 'URL PATH DECODE: ' . $urlMaster->decode('refactoring.guru/nhd') . PHP_EOL;
     }
 
 } catch (Exception $e) {
