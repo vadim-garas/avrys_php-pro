@@ -1,7 +1,7 @@
 <?php
 
 
-namespace AvrysPhp\Actions;
+namespace AvrysPhp\Interfaces;
 
 interface IUrlEncoder
 {
