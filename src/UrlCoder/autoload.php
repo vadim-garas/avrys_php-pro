@@ -27,7 +27,6 @@ spl_autoload_register(function ($class) {
 
     // if the file exists, require it
     if (file_exists($file)) {
-        echo 'REQUIRE FILES: ' . $file . PHP_EOL;
         require_once $file;
     }
 });

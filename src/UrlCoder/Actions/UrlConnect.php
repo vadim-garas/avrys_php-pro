@@ -47,7 +47,6 @@ class UrlConnect
         curl_exec($this->curl);
         $response = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
 
-        echo 'RESPONSE: ' . $response . PHP_EOL;
         if (empty($response) || $response != 200) {
             throw new \http\Exception\InvalidArgumentException('url is not exist');
         }

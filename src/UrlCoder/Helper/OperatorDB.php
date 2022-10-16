@@ -10,7 +10,6 @@ class OperatorDB
     public function __construct()
     {
         $this->fileName = __DIR__.'/url_db.json';
-        echo 'DB FILE PATH: ' . $this->fileName . PHP_EOL;
         $this->arrData = $this->loadData();
     }
 
