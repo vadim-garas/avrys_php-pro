@@ -1,6 +1,6 @@
 <?php
 
-namespace AvrysPhp\Helper;
+namespace AvrysPhp\UrlCoder\Helper;
 
 class OperatorDB
 {
@@ -26,14 +26,11 @@ class OperatorDB
      */
     protected function loadData(): array
     {
-        if (file_exists($this->fileName) && filesize($this->fileName)){
-            $file = file_get_contents($this->fileName);
-            $result = json_decode($file,TRUE);
-            unset($file);
+        $file = file_get_contents($this->fileName);
+        $result = (array) json_decode($file,TRUE);
+        unset($file);
 
-            return $result;
-        }
-        return array();
+        return $result;
     }
 
     /**

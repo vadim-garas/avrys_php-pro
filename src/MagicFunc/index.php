@@ -1,13 +1,15 @@
 <?php
 
-require_once __DIR__.'/autoload.php';
+use AvrysPhp\MagicFunc\MyData;
+
+require_once __DIR__ . '/../autoload.php';
 
 static $JASON_FILE_NAME = 'src/MagicFunc/todo.json';
 
 $arrData = array('first', 'second');
 
 try {
-    $myData = new \AvrysPhp\MyData($arrData);
+    $myData = new MyData($arrData);
     $myData->getFromFile($JASON_FILE_NAME);
     $myData->addToFile($JASON_FILE_NAME, $arrData);
 

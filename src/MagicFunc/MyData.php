@@ -1,6 +1,6 @@
 <?php
 
-namespace AvrysPhp;
+namespace AvrysPhp\MagicFunc;
 
 use http\Exception;
 

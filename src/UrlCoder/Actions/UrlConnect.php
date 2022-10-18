@@ -1,6 +1,6 @@
 <?php
 
-namespace AvrysPhp\Actions;
+namespace AvrysPhp\UrlCoder\Actions;
 
 class UrlConnect
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace AvrysPhp\Interfaces;
+namespace AvrysPhp\UrlCoder\Interfaces;
 
 interface IUrlDecoder
 {

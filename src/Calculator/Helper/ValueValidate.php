@@ -1,6 +1,7 @@
 <?php
 
-namespace PhpPro\calculator;
+namespace AvrysPhp\Calculator\Helper;
+
 class ValueValidate
 {
     private int|float $element;

@@ -1,8 +1,14 @@
 <?php
 
-require_once __DIR__ . '/autoload.php';
+require_once __DIR__ . '/../autoload.php';
 
 use http\Exception;
+use AvrysPhp\UrlCoder\
+{
+    Helper\OperatorDB,
+    Actions\UrlConnect,
+    Actions\UrlMaster
+};
 
 $urlPath = [
     'https://www.php-fig.org/psr/',
@@ -14,10 +20,10 @@ $urlPath = [
 
 try {
 
-    $dbOperator = new \AvrysPhp\Helper\OperatorDB();
-    $urlConnect = new \AvrysPhp\Actions\UrlConnect();
+    $dbOperator = new \AvrysPhp\UrlCoder\Helper\OperatorDB();
+    $urlConnect = new \AvrysPhp\UrlCoder\Actions\UrlConnect();
     $arrUrlTable = $dbOperator->getArrUrlTable();
-    $urlMaster = new \AvrysPhp\Actions\UrlMaster($arrUrlTable);
+    $urlMaster = new \AvrysPhp\UrlCoder\Actions\UrlMaster($arrUrlTable);
 
     foreach ($urlPath as $value) {
         $urlConnect->urlFormatValidate($value);

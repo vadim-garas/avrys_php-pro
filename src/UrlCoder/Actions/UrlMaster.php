@@ -1,9 +1,9 @@
 <?php
 
-namespace AvrysPhp\Actions;
+namespace AvrysPhp\UrlCoder\Actions;
 
-use AvrysPhp\Interfaces\IUrlDecoder;
-use AvrysPhp\Interfaces\IUrlEncoder;
+use AvrysPhp\UrlCoder\Interfaces\IUrlDecoder;
+use AvrysPhp\UrlCoder\Interfaces\IUrlEncoder;
 
 
 class UrlMaster implements IUrlDecoder, IUrlEncoder
