@@ -2,16 +2,24 @@
 
 namespace AvrysPhp\UrlCoder\Actions;
 
+use CurlHandle;
+use Psr\Log\LoggerInterface;
+
+
 class UrlConnect
 {
-    protected object $curl;
+    protected CurlHandle $curl;
+    protected LoggerInterface $logger;
 
     /**
+     * @param LoggerInterface $logger
      * @return void
      */
-    public function __construct()
+    public function __construct(LoggerInterface $logger)
     {
         $this->curl = curl_init();
+        $this->logger = $logger;
+        $this->logger->alert("class CurlHandle is construct.");
     }
 
     public function __destruct()
@@ -28,6 +36,7 @@ class UrlConnect
     {
         $urlValid = filter_var($url, FILTER_VALIDATE_URL,FILTER_FLAG_PATH_REQUIRED);
         if (!$urlValid) {
+            $this->logger->error("ERROR: url is not valid");
             throw new \http\Exception\InvalidArgumentException('url is not valid');
         }
 
@@ -48,6 +57,7 @@ class UrlConnect
         $response = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
 
         if (empty($response) || $response != 200) {
+            $this->logger->error("ERROR: url is not exists");
             throw new \http\Exception\InvalidArgumentException('url is not exist');
         }
     }
