@@ -31,22 +31,19 @@ $urlPath = [
 
 /**
  * Реалізував залежність на guzzlehttp/guzzle
-Реалізував власний логер, та обʼєкт конфігів,
-які можна викликати в будь якому місці програми
-Синглетон зробив trait-ом, додав його у Логер та Конфіг
+ * Реалізував власний логер, та обʼєкт конфігів,
+ * які можна викликати в будь якому місці програми
+ * Синглетон зробив trait-ом, додав його у Логер та Конфіг
  */
 
 try {
 
     MyConfig::getInstance()->setConfig($config);
-    // echo 'URL PATH DECODE: ' . MyConfig::getInstance()->getValue('logError') . PHP_EOL;
 
     MyLogger::getInstance()->setLogger(new Logger('general'));
     MyLogger::getInstance()->pushHandler(
         new StreamHandler( MyConfig::getInstance()->getValue('logError'), Level::Error)
     );
-
-    // MyLogger::getInstance()->msgToLogger('ERROR: failed data, url is not exist in db');
 
     $dbOperator = new OperatorDB(MyConfig::getInstance()->getValue('dbFile'));
     $urlConnect = new UrlConnect();
