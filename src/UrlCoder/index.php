@@ -1,56 +1,62 @@
 <?php
 
-require_once __DIR__ . '/../../vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
-use http\Exception;
 use Monolog\ {
     Level,
     Logger,
     Handler\StreamHandler
 };
-use AvrysPhp\UrlCoder\ {
+use AvrysPhp\UrlCoder\{
+    Helpers\MyConfig,
+    Helpers\MyLogger,
     Helpers\OperatorDB,
     Actions\UrlConnect,
-    Actions\UrlMaster,
-    Interfaces\IOperatorDB
+    Actions\UrlMaster
 };
 
 $config = [
     'dbFile' => __DIR__.'/Helpers/url_db.json',
-    'logFile' => [
-        'error' => __DIR__ . '/logs/error.log',
-        'info' => __DIR__ . '/logs/info.log',
-        'alert' => __DIR__ . '/logs/alert.log'
-    ]
+    'logError' => __DIR__.'/logs/error.log',
+    'logInfo' => __DIR__.'/logs/info.log',
+    'logAlert' => __DIR__.'/logs/alert.log'
 ];
 
 $urlPath = [
     'https://www.php-fig.org/psr/',
-    'https://www.liqpay.ua/documentation/start',
+    'https://www.liqpay.u2a/documentation/start',
     'https://refactoring.guru/ru/design-patterns/bridge/php/example',
     'https://www.youtube.com/watch?v=bZADEJQ8Z5I&list=PLuEo4W0EBxtWLw8glAHArx1JybLl81LI3&index=9',
 ];
 
-$logger = new Logger('general');
-$logger->pushHandler(new StreamHandler($config['logFile']['error'], Level::Error));
-$logger->pushHandler(new StreamHandler($config['logFile']['info'], Level::Info));
-$logger->pushHandler(new StreamHandler($config['logFile']['alert'], Level::Alert));
-
+/**
+ * Реалізував залежність на guzzlehttp/guzzle
+Реалізував власний логер, та обʼєкт конфігів,
+які можна викликати в будь якому місці програми
+Синглетон зробив trait-ом, додав його у Логер та Конфіг
+ */
 
 try {
-    // echo 'DATA BASE FILE PATH = ' . $config['dbFile'] . PHP_EOL;
-    $dbOperator = new OperatorDB($config['dbFile']);
-    $urlConnect = new UrlConnect($logger);
+
+    MyConfig::getInstance()->setConfig($config);
+    // echo 'URL PATH DECODE: ' . MyConfig::getInstance()->getValue('logError') . PHP_EOL;
+
+    MyLogger::getInstance()->setLogger(new Logger('general'));
+    MyLogger::getInstance()->pushHandler(
+        new StreamHandler( MyConfig::getInstance()->getValue('logError'), Level::Error)
+    );
+
+    // MyLogger::getInstance()->msgToLogger('ERROR: failed data, url is not exist in db');
+
+    $dbOperator = new OperatorDB(MyConfig::getInstance()->getValue('dbFile'));
+    $urlConnect = new UrlConnect();
     $arrUrlTable = $dbOperator->getArrUrlTable();
-    $urlMaster = new UrlMaster($arrUrlTable, $logger);
+    $urlMaster = new UrlMaster($arrUrlTable);
 
     foreach ($urlPath as $value) {
         $urlConnect->urlFormatValidate($value);
         $urlEncode = $urlMaster->encode($value);
         $dbOperator->saveData($value, $urlEncode);
-
-        // Test decode with any key from url_db.json
-        // echo 'URL PATH DECODE: ' . $urlMaster->decode('refactoring.guru/nhd') . PHP_EOL;
     }
 
 } catch (\Exception $e) {

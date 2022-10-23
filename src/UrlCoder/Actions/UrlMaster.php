@@ -2,9 +2,9 @@
 
 namespace AvrysPhp\UrlCoder\Actions;
 
+use AvrysPhp\UrlCoder\Helpers\MyLogger;
 use AvrysPhp\UrlCoder\Interfaces\IUrlDecoder;
 use AvrysPhp\UrlCoder\Interfaces\IUrlEncoder;
-use Psr\Log\LoggerInterface;
 
 
 class UrlMaster implements IUrlDecoder, IUrlEncoder
@@ -13,16 +13,13 @@ class UrlMaster implements IUrlDecoder, IUrlEncoder
     protected array $arrCutParts;
     protected int $urlLen;
     protected array $arrData;
-    protected LoggerInterface $logger;
 
     /**
      * @param array $arrData
-     * @param LoggerInterface $logger
      */
-    public function __construct(array $arrData, LoggerInterface $logger)
+    public function __construct(array $arrData)
     {
         $this->arrData = $arrData;
-        $this->logger = $logger;
         $this->arrCutParts = array('https://', 'www.');
         $this->urlLen = 20;
     }
@@ -35,7 +32,7 @@ class UrlMaster implements IUrlDecoder, IUrlEncoder
     public function decode(string $code): string
     {
         if (!in_array($code, $this->arrData)) {
-            $this->logger->error("ERROR: failed data, url " . $code . " is not exist in db");
+            MyLogger::getInstance()->msgToLogger('ERROR: failed data, url ' . $code . ' is not exist in db');
             throw new \http\Exception\InvalidArgumentException('failed data, url ' . $code . ' is not exist in db');
         }
 
@@ -53,10 +50,9 @@ class UrlMaster implements IUrlDecoder, IUrlEncoder
         $trim = preg_replace('/\/(.*)/', '', $temp);
 
         if (strlen($trim) > $this->urlLen) {
-            $this->logger->error("length of domain naim more then 20 symbol");
+            MyLogger::getInstance()->msgToLogger('ERROR: length of domain naim more then 20 symbol');
             throw new \http\Exception\InvalidArgumentException('length of domain naim more then 20 symbol');
         }
-
         $concat = $trim . '/' . str_shuffle($trim . static::CHAR_SET);
 
         return substr($concat, 0, $this->urlLen);

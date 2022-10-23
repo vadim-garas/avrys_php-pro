@@ -2,63 +2,48 @@
 
 namespace AvrysPhp\UrlCoder\Actions;
 
-use CurlHandle;
-use Psr\Log\LoggerInterface;
+use AvrysPhp\UrlCoder\Helpers\MyLogger;
 
 
 class UrlConnect
 {
-    protected CurlHandle $curl;
-    protected LoggerInterface $logger;
+    protected \GuzzleHttp\Client $client;
 
     /**
-     * @param LoggerInterface $logger
      * @return void
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct()
     {
-        $this->curl = curl_init();
-        $this->logger = $logger;
-        $this->logger->alert("class CurlHandle is construct.");
-    }
-
-    public function __destruct()
-    {
-        curl_close($this->curl);
+        $this->client = new \GuzzleHttp\Client();
     }
 
     /**
      * @param string $url
-     * @throws \InvalidArgumentException
      * @return void
+     *@throws \Exception
      */
     public function urlFormatValidate(string $url): void
     {
-        $urlValid = filter_var($url, FILTER_VALIDATE_URL,FILTER_FLAG_PATH_REQUIRED);
+        $urlValid = filter_var($url, FILTER_VALIDATE_URL);
         if (!$urlValid) {
-            $this->logger->error("ERROR: url is not valid");
+            MyLogger::getInstance()->msgToLogger('ERROR: failed data, url is not valid');
             throw new \http\Exception\InvalidArgumentException('url is not valid');
         }
-
         $this->urlExistsVerify($urlValid);
     }
 
     /**
      * @param string $url
      * @return void
-     *@throws \InvalidArgumentException
+     *@throws \Exception
      */
     private function urlExistsVerify(string $url): void
     {
-        curl_setopt($this->curl, CURLOPT_URL, $url);
-        curl_setopt($this->curl, CURLOPT_NOBODY, true);
-        curl_setopt($this->curl,  CURLOPT_RETURNTRANSFER, true);
-        curl_exec($this->curl);
-        $response = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
-
-        if (empty($response) || $response != 200) {
-            $this->logger->error("ERROR: url is not exists");
-            throw new \http\Exception\InvalidArgumentException('url is not exist');
+        $response = $this->client->request('GET', $url);
+        $code = $response->getStatusCode();
+        if ( $code != 200 ) {
+            MyLogger::getInstance()->msgToLogger('ERROR: url is not exists');
+            throw new \http\Exception\InvalidArgumentException('url: ' . $url . ' is not exist');
         }
     }
 }
