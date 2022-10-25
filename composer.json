@@ -1,0 +1,21 @@
+{
+    "name": "avrys/php-pro",
+    "type": "project",
+    "require": {
+        "monolog/monolog": "3.*",
+        "nesbot/carbon": "2.*",
+        "guzzlehttp/guzzle": "7.*"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "AvrysPhp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Vadym Garas"
+        }
+    ],
+    "minimum-stability": "dev"
+}
