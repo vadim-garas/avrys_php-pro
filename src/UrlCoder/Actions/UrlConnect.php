@@ -2,12 +2,14 @@
 
 namespace AvrysPhp\UrlCoder\Actions;
 
-use AvrysPhp\UrlCoder\Helpers\MyLogger;
+use AvrysPhp\UrlCoder\Helpers\SingletonLogger;
+use http\Exception\InvalidArgumentException;
 
 
 class UrlConnect
 {
     protected \GuzzleHttp\Client $client;
+    protected $allowCodes = array(200, 201, 301, 302);
 
     /**
      * @return void
@@ -24,26 +26,35 @@ class UrlConnect
      */
     public function urlFormatValidate(string $url): void
     {
-        $urlValid = filter_var($url, FILTER_VALIDATE_URL);
-        if (!$urlValid) {
-            MyLogger::getInstance()->msgToLogger('ERROR: failed data, url is not valid');
-            throw new \http\Exception\InvalidArgumentException('url is not valid');
+        try {
+            $urlValid = filter_var($url, FILTER_VALIDATE_URL);
+        } catch (\Exception $e) {
+            SingletonLogger::getInstance()->msgToLogger('ERROR: failed data, url is not valid');
+            throw new InvalidArgumentException('url is not valid');
         }
+
         $this->urlExistsVerify($urlValid);
     }
 
     /**
      * @param string $url
-     * @return void
+     * @return bool
      *@throws \Exception
      */
-    private function urlExistsVerify(string $url): void
+    private function urlExistsVerify(string $url): bool
     {
-        $response = $this->client->request('GET', $url);
-        $code = $response->getStatusCode();
-        if ( $code != 200 ) {
-            MyLogger::getInstance()->msgToLogger('ERROR: url is not exists');
-            throw new \http\Exception\InvalidArgumentException('url: ' . $url . ' is not exist');
+        $result = false;
+
+        try {
+            $response = $this->client->request('GET', $url);
+            $code = $response->getStatusCode();
+
+            $result = in_array($code, $this->allowCodes);
+        } catch (\Exception $e) {
+            SingletonLogger::getInstance()->msgToLogger('ERROR: url is not exists');
+            throw new InvalidArgumentException('url: ' . $url . ' is not exist');
+        } finally {
+            return $result;
         }
     }
 }

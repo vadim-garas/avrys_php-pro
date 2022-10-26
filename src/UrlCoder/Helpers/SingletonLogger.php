@@ -2,14 +2,15 @@
 
 namespace AvrysPhp\UrlCoder\Helpers;
 
+use AvrysPhp\Core\Traits\SingletonTrait;
 use Psr\Log\LoggerInterface;
 use Monolog\Handler\AbstractProcessingHandler;
 
-class MyLogger
+class SingletonLogger
 {
     protected  LoggerInterface $logger;
 
-    use MySingleton;
+    use SingletonTrait;
 
     /**
      * @param string $message

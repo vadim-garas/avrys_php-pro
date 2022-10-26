@@ -1,0 +1,32 @@
+<?php
+
+namespace AvrysPhp\Core\CLI\Commands;
+
+use AvrysPhp\UrlCoder\Actions\UrlMaster;
+use UfoCms\ColoredCli\CliColor;
+
+class UrlDecodeCommand extends AbstractCommand
+{
+    protected UrlMaster $convertor;
+
+    /**
+     * @param UrlMaster $convertor
+     */
+    public function __construct(UrlMaster $convertor)
+    {
+        parent::__construct();
+        $this->convertor = $convertor;
+    }
+
+    public function run(array $params = []): void
+    {
+        parent::run($params);
+        $this->writer->setColor(CliColor::CYAN)
+            ->writeLn('Shortcode: ' . $this->convertor->decode($params[0]));
+    }
+
+    public static function getCommandDesc(): string
+    {
+        return 'Decode shortcode to url';
+    }
+}

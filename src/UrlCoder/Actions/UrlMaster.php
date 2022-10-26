@@ -2,7 +2,7 @@
 
 namespace AvrysPhp\UrlCoder\Actions;
 
-use AvrysPhp\UrlCoder\Helpers\MyLogger;
+use AvrysPhp\UrlCoder\Helpers\SingletonLogger;
 use AvrysPhp\UrlCoder\Interfaces\IUrlDecoder;
 use AvrysPhp\UrlCoder\Interfaces\IUrlEncoder;
 
@@ -32,7 +32,7 @@ class UrlMaster implements IUrlDecoder, IUrlEncoder
     public function decode(string $code): string
     {
         if (!in_array($code, $this->arrData)) {
-            MyLogger::getInstance()->msgToLogger('ERROR: failed data, url ' . $code . ' is not exist in db');
+            SingletonLogger::getInstance()->msgToLogger('ERROR: failed data, url ' . $code . ' is not exist in db');
             throw new \http\Exception\InvalidArgumentException('failed data, url ' . $code . ' is not exist in db');
         }
 
@@ -50,7 +50,7 @@ class UrlMaster implements IUrlDecoder, IUrlEncoder
         $trim = preg_replace('/\/(.*)/', '', $temp);
 
         if (strlen($trim) > $this->urlLen) {
-            MyLogger::getInstance()->msgToLogger('ERROR: length of domain naim more then 20 symbol');
+            SingletonLogger::getInstance()->msgToLogger('ERROR: length of domain naim more then 20 symbol');
             throw new \http\Exception\InvalidArgumentException('length of domain naim more then 20 symbol');
         }
         $concat = $trim . '/' . str_shuffle($trim . static::CHAR_SET);
