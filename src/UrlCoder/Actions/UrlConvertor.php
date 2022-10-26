@@ -3,12 +3,16 @@
 namespace AvrysPhp\UrlCoder\Actions;
 
 use AvrysPhp\UrlCoder\Helpers\SingletonLogger;
+use AvrysPhp\UrlCoder\Interfaces\ICodeRepository;
 use AvrysPhp\UrlCoder\Interfaces\IUrlDecoder;
 use AvrysPhp\UrlCoder\Interfaces\IUrlEncoder;
+use AvrysPhp\UrlCoder\Interfaces\IUrlValidator;
 
 
-class UrlMaster implements IUrlDecoder, IUrlEncoder
+class UrlConvertor implements IUrlDecoder, IUrlEncoder
 {
+    protected IUrlValidator $validator;
+    protected ICodeRepository $repository;
     const CHAR_SET = '0123456789abcdfghjkmnpqrstvwxyzABCDFGHJKLMNPQRSTVWXYZ';
     protected array $arrCutParts;
     protected int $urlLen;
@@ -16,9 +20,13 @@ class UrlMaster implements IUrlDecoder, IUrlEncoder
 
     /**
      * @param array $arrData
+     * @param ICodeRepository $repository
+     * @param IUrlValidator $validator
      */
-    public function __construct(array $arrData)
+    public function __construct(ICodeRepository $repository, IUrlValidator $validator, array $arrData, )
     {
+        $this->repository = $repository;
+        $this->validator = $validator;
         $this->arrData = $arrData;
         $this->arrCutParts = array('https://', 'www.');
         $this->urlLen = 20;

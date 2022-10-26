@@ -1,9 +1,15 @@
 <?php
 
+use AvrysPhp\Core\CLI\CLIWriter;
 use AvrysPhp\Core\CLI\Commands\TestCommand;
+use AvrysPhp\Core\CLI\Commands\UrlDecodeCommand;
+use AvrysPhp\Core\CLI\Commands\UrlEncodeCommand;
 use AvrysPhp\Core\ConfigHandler;
 use AvrysPhp\Core\CLI\CommandHandler;
 
+use AvrysPhp\UrlCoder\Actions\UrlConvertor;
+use AvrysPhp\UrlCoder\Actions\UrlValidator;
+use AvrysPhp\UrlCoder\FileRepository;
 use AvrysPhp\UrlCoder\Helpers\SingletonLogger;
 use GuzzleHttp\Client;
 use UfoCms\ColoredCli\CliColor;
@@ -34,31 +40,31 @@ try {
 
     $logger = new Logger($configHandler->get('monolog.channel'));
     $singletonLogger = SingletonLogger::getInstance($logger);
+    $singletonLogger->pushHandler(new StreamHandler($configHandler->get('monolog.level.error'), Level::Error))
+        ->pushHandler(new StreamHandler($configHandler->get('monolog.level.info'), Level::Info));
 
-    // print_r(getRealPath('logFile.error', $config));
+    $fileRepository = new FileRepository($configHandler->get('dbFile'));
+    $urlValidator = new UrlValidator(new Client());
+    $converter = new UrlConvertor(
+        $fileRepository,
+        $urlValidator,
+        $configHandler->get('urlConverter.codeLength')
+    );
 
-//    $configHandler = ConfigHandler::getInstance()->setParameters($configs);
+    $commandHandler->addCommand(new UrlEncodeCommand($converter));
+    $commandHandler->addCommand(new UrlDecodeCommand($converter));
 
-//
-//    MyLogger::getInstance()->setLogger(new Logger('general'));
-//    MyLogger::getInstance()->pushHandler(
-//        new StreamHandler( ConfigHandler::getInstance()->getValue('logError'), Level::Error)
-//    );
-//
-//    $dbOperator = new OperatorDB(ConfigHandler::getInstance()->getValue('dbFile'));
-//    $urlConnect = new UrlConnect();
-//    $arrUrlTable = $dbOperator->getArrUrlTable();
-//    $urlMaster = new UrlMaster($arrUrlTable);
-//
-//    foreach ($urlPath as $value) {
-//        $urlConnect->urlFormatValidate($value);
-//        $urlEncode = $urlMaster->encode($value);
-//        $dbOperator->saveData($value, $urlEncode);
-//    }
+    $commandHandler->handle($argv, function ($params, \Throwable $e) {
+        SingletonLogger::error($e->getMessage());
+        CLIWriter::getInstance()->setColor(CliColor::RED)
+            ->writeLn($e->getMessage());
 
+        CLIWriter::getInstance()->write($e->getFile() . ': ')
+            ->writeLn($e->getLine());
+    });
 } catch (\Exception $e) {
 
     echo $e->getMessage();
+} finally {
+    exit;
 }
-
-echo PHP_EOL;

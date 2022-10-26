@@ -2,17 +2,17 @@
 
 namespace AvrysPhp\Core\CLI\Commands;
 
-use AvrysPhp\UrlCoder\Actions\UrlMaster;
+use AvrysPhp\UrlCoder\Actions\UrlConvertor;
 use UfoCms\ColoredCli\CliColor;
 
 class UrlDecodeCommand extends AbstractCommand
 {
-    protected UrlMaster $convertor;
+    protected UrlConvertor $convertor;
 
     /**
-     * @param UrlMaster $convertor
+     * @param UrlConvertor $convertor
      */
-    public function __construct(UrlMaster $convertor)
+    public function __construct(UrlConvertor $convertor)
     {
         parent::__construct();
         $this->convertor = $convertor;

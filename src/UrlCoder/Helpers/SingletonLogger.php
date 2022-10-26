@@ -6,6 +6,18 @@ use AvrysPhp\Core\Traits\SingletonTrait;
 use Psr\Log\LoggerInterface;
 use Monolog\Handler\AbstractProcessingHandler;
 
+/**
+ * @method static emergency(string $message, array $context = [])
+ * @method static alert(string $message, array $context = [])
+ * @method static critical(string $message, array $context = [])
+ * @method static error(string $message, array $context = [])
+ * @method static warning(string $message, array $context = [])
+ * @method static notice(string $message, array $context = [])
+ * @method static info(string $message, array $context = [])
+ * @method static debug(string $message, array $context = [])
+ * @method static log($level, string $message, array $context = [])
+ */
+
 class SingletonLogger
 {
     protected  LoggerInterface $logger;
@@ -28,8 +40,8 @@ class SingletonLogger
         return $this;
     }
 
-    public function setLogger($logger): void
+    public function getLogger(): LoggerInterface
     {
-        $this->logger = $logger;
+        return $this->logger;
     }
 }

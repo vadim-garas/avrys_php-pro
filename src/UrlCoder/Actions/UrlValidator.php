@@ -3,28 +3,31 @@
 namespace AvrysPhp\UrlCoder\Actions;
 
 use AvrysPhp\UrlCoder\Helpers\SingletonLogger;
-use http\Exception\InvalidArgumentException;
+use AvrysPhp\UrlCoder\Interfaces\IUrlValidator;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use InvalidArgumentException;
 
 
-class UrlConnect
+class UrlValidator implements IUrlValidator
 {
-    protected \GuzzleHttp\Client $client;
-    protected $allowCodes = array(200, 201, 301, 302);
+    protected ClientInterface $client;
+    protected array $allowCodes = array(200, 201, 301, 302);
 
     /**
      * @return void
      */
-    public function __construct()
+    public function __construct(ClientInterface $client)
     {
-        $this->client = new \GuzzleHttp\Client();
+        $this->client = $client;
     }
 
     /**
      * @param string $url
-     * @return void
-     *@throws \Exception
+     * @throws InvalidArgumentException
+     * @return bool
      */
-    public function urlFormatValidate(string $url): void
+    public function urlFormatValidate(string $url): bool
     {
         try {
             $urlValid = filter_var($url, FILTER_VALIDATE_URL);
@@ -33,15 +36,15 @@ class UrlConnect
             throw new InvalidArgumentException('url is not valid');
         }
 
-        $this->urlExistsVerify($urlValid);
+        return true;
     }
 
     /**
      * @param string $url
      * @return bool
-     *@throws \Exception
+     * @throws InvalidArgumentException|GuzzleException
      */
-    private function urlExistsVerify(string $url): bool
+    public function urlExistsVerify(string $url): bool
     {
         $result = false;
 
