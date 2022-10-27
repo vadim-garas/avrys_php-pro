@@ -2,7 +2,8 @@
 
 namespace AvrysPhp\Core\CLI\Commands;
 
-use AvrysPhp\UrlCoder\UrlConvertor;
+
+use AvrysPhp\UrlCoder\Actions\UrlConvertor;
 use UfoCms\ColoredCli\CliColor;
 
 class UrlEncodeCommand extends AbstractCommand

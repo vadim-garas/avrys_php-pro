@@ -6,38 +6,21 @@ use AvrysPhp\Core\Exceptions\ParameterNotFoundException;
 use AvrysPhp\Core\Interfaces\IConfigHandler;
 use AvrysPhp\Core\Interfaces\ISingleton;
 use AvrysPhp\Core\Traits\SingletonTrait;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 
 
 class ConfigHandler implements IConfigHandler, ISingleton
 {
-    protected array $parameters = [];
-
     use SingletonTrait;
 
     /**
-     * @param string $key
-     * @return string
+     * @var array Parameters from file
      */
-    public function getValue(string $key): string
-    {
-        $tokens = explode('.', $key);
-        $context = $this->parameters;
-
-        while (null !== ($token = array_shift($tokens))) {
-            if (!isset($context[$token])) {
-                 throw new ParameterNotFoundException('Parameter not found: ' . $key);
-            }
-
-            $context = $context[$token];
-        }
-        return $context;
-    }
+    protected array $parameters = [];
 
     /**
+     * @description Parameter array loading method
      * @param array $configs
-     * @return self
+     * @return $this
      */
     public function addConfigs(array $configs): self
     {
@@ -46,20 +29,13 @@ class ConfigHandler implements IConfigHandler, ISingleton
     }
 
     /**
-     * Finds an entry of the container by its identifier and returns it.
-     *
-     * @param string $id Identifier of the entry to look for.
-     *
-     * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
-     * @throws ContainerExceptionInterface Error while retrieving the entry.
-     *
-     * @return mixed Entry.
+     * @inheritDoc
      */
-    public function get(string $id): mixed
+    public function has(string $id): bool
     {
         try {
             $result = true;
-            $this->getValue($id);
+            $this->getRealPath($id);
         } catch (ParameterNotFoundException $e) {
             $result = false;
         }
@@ -69,9 +45,28 @@ class ConfigHandler implements IConfigHandler, ISingleton
     /**
      * @inheritDoc
      */
-    public function has(string $id): bool
+    public function get(string $id): mixed
     {
-        // TODO: Implement has() method.
-        return true;
+        return $this->getRealPath($id);
+    }
+
+    public function __get($name)
+    {
+        return $this->get(str_replace('_', '.', $name));
+    }
+
+    protected function getRealPath(string $id): mixed
+    {
+        $tokens = explode('.', $id);
+        $context = $this->parameters;
+
+        while (null !== ($token = array_shift($tokens))) {
+            if (!isset($context[$token])) {
+                throw new ParameterNotFoundException('Parameter not found: ' . $id);
+            }
+
+            $context = $context[$token];
+        }
+        return $context;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'dbFile' => __DIR__.'/Helpers/url_db.json',
+    'dbFile' => __DIR__.'/../storage/url_db.json',
     'monolog' => [
         'channel' => 'general',
         'level' => [
@@ -10,13 +10,8 @@ return [
             'alert' => __DIR__ . '/../logs/alert.log'
         ],
     ],
+    'urlConverter' => [
+        'codeLength' => 20,
+    ],
 ];
 
-//return [
-//    'dbFile' => __DIR__.'/Helpers/url_db.json',
-//    'logFile' => [
-//        'error' => __DIR__ . '/logs/error.log',
-//        'info' => __DIR__ . '/logs/info.log',
-//        'alert' => __DIR__ . '/logs/alert.log'
-//    ]
-//];

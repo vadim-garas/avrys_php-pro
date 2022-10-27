@@ -9,19 +9,14 @@ use LogicException;
 
 trait SingletonTrait
 {
-    private static array $instances = array();
+    protected static ?self $instance = null;
 
-    /**
-     * @return ISingleton
-     */
     public static function getInstance(): self
     {
-        $cls = static::class;
-        if (!isset(self::$instances[$cls])) {
-            self::$instances[$cls] = new static();
+        if (null === self::$instance) {
+            self::$instance = new static();
         }
-
-        return self::$instances[$cls];
+        return self::$instance;
     }
 
     protected function __construct() { }
