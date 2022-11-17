@@ -14,7 +14,9 @@ try {
 //        ]);
 
 
-    $allUsers = $dbh->query("select id, name, update_at, phone from user_data left join user_phone on id = id_user where id > 1 ")->fetchAll(PDO::FETCH_ASSOC);
+    $allUsers = $dbh
+        ->query("select id, name, update_at, phone from user_data left join user_phone on id = id_user where id > 1 ")
+        ->fetchAll(PDO::FETCH_ASSOC);
     // $allUsers = $dbh->query("select * from user_data")->fetchAll(PDO::FETCH_ASSOC);
 
     $sql = 'SHOW TABLES';
