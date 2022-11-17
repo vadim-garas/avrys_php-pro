@@ -3,11 +3,12 @@
     "type": "project",
     "require": {
         "monolog/monolog": "3.*",
-        "nesbot/carbon": "2.*",
         "guzzlehttp/guzzle": "7.*",
+        "nesbot/carbon": "2.*",
         "psr/container": "2.*",
         "ext-curl": "*",
-        "ufo-cms/colored_cli": " *"
+        "ufo-cms/colored_cli": " *",
+        "ext-readline": "*"
     },
     "license": "MIT",
     "autoload": {

@@ -14,3 +14,18 @@ services:
     # прописуємо синхронізацію директорій
     volumes:
       - ./:/srv/src/php-pro
+    links:
+      - db_mysql
+
+  db_mysql:
+    image: mysql:latest
+    container_name: php-pro_mysql
+    ports:
+      - 13306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: php_pro
+      MYSQL_USER: avrys
+      MYSQL_PASSWORD: mysqlavrys
+    volumes:
+      - ./docker/databases/my_sql_dump:/docker-entrypoint-initdb.d

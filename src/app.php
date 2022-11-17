@@ -34,13 +34,15 @@ $urlPath = [
 
 try {
 
-    print_r($configs);
+    $command = new TestCommand();
+    $command->run();
+
+
+
     $configHandler = ConfigHandler::getInstance()->addConfigs($configs);
     $commandHandler = new CommandHandler(new TestCommand());
     echo 'TEST 1: ' . $configHandler->get('monolog.channel') . PHP_EOL;
     $logger = new Logger($configHandler->get('monolog.channel'));
-
-    print_r($logger);
 
     $singletonLogger = SingletonLogger::getInstance($logger);
     $singletonLogger->pushHandler(new StreamHandler($configHandler->get('monolog.level.error'), Level::Error))
