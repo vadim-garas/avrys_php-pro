@@ -28,4 +28,4 @@ services:
       MYSQL_USER: avrys
       MYSQL_PASSWORD: mysqlavrys
     volumes:
-      - ./docker/databases/my_sql_dump:/docker-entrypoint-initdb.d
+      - ./docker/databases/mysql_dump:/docker-entrypoint-initdb.d
