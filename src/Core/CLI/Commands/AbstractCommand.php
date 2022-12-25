@@ -52,11 +52,20 @@ abstract class AbstractCommand implements ICliCommand
             ->writeBorder();
     }
 
+//    public function run(array $params = []): void
+//    {
+//        $this->params = $params;
+//        if (CliParamAnalyzer::isVerbose()) {
+//            $this->printHeader();
+//        }
+//    }
+
+
     public function run(array $params = []): void
     {
         $this->params = $params;
-        if (CliParamAnalyzer::isVerbose()) {
-            $this->printHeader();
-        }
+        $this->printVerboseInfo();
+        $this->writer->setColor(CliColor::CYAN);
+        $this->writer->writeLn($this->runAction());
     }
 }

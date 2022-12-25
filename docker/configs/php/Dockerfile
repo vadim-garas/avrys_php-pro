@@ -23,6 +23,7 @@ RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-di
 # краще перенести на початок
 WORKDIR /srv/src/php-pro
 
+
 # спитати про синхронізацію за секцію
 #COPY --from=composer:2.1 /usr/bin/composer /usr/local/bin/composer
 CMD [ "php-fpm"]

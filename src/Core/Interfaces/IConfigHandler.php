@@ -6,5 +6,4 @@ use Psr\Container\ContainerInterface;
 
 interface IConfigHandler extends ContainerInterface
 {
-
 }

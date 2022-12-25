@@ -13,7 +13,7 @@ services:
       PHP_IDE_CONFIG: "serverName=docker"
     # прописуємо синхронізацію директорій
     volumes:
-      - ./:/srv/src/php-pro
+      - ./:/srv/src/php_pro
     links:
       - db_mysql
 
@@ -29,4 +29,16 @@ services:
       MYSQL_PASSWORD: mysqlavrys
     volumes:
       - ./docker/databases/mysql_dump:/docker-entrypoint-initdb.d
-#      - ./mysql_data:/var/lib/mysql
+
+  nginx:
+    image: nginx:latest
+    container_name: php_pro_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/srv/src/php_pro
+      - ./docker/configs/nginx:/etc/nginx/conf.d
+      - ./logs/nginx:/var/log/nginx
+    links:
+      - php
