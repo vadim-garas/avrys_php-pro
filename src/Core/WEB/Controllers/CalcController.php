@@ -17,10 +17,13 @@ class CalcController
 
     public function __construct()
     {
-        echo 'Smart calculator constructor is called.';
         $this->calculator = new SmartCalculator();
     }
 
+    /**
+     * @param $exp
+     * @return string
+     */
     public function getResult($exp): string
     {
         $this->calculator->actionsRegistration([new Sum(), new Div(), new Multi(), new Expo(), new Sub()]);
