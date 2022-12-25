@@ -13,7 +13,7 @@ services:
       PHP_IDE_CONFIG: "serverName=docker"
     # прописуємо синхронізацію директорій
     volumes:
-      - ./:/srv/src/php_pro
+      - ./:/srv/src/php-pro
     links:
       - db_mysql
 
@@ -37,7 +37,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./:/srv/src/php_pro
+      - ./:/srv/src/php-pro
       - ./docker/configs/nginx:/etc/nginx/conf.d
       - ./logs/nginx:/var/log/nginx
     links:

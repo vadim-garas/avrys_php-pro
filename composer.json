@@ -14,6 +14,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
+            "Doctor\\PhpPro\\": "src/",
             "AvrysPhp\\": "src/"
         }
     },
